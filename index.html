@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link rel="stylesheet" href="/style.css"> -->
+     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            color: rgba(255, 255, 255, 0.87);
+            background-color: #000000;
+            /* overflow: auto; */ /* Tidak perlu karena html yang mengontrol */
+        }
+        
+        html {
+            overflow: auto; /* Ini yang mengontrol scroll utama */
+        }
+        
+        #app {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: row; /* Ubah dari column ke row */
+            justify-content: center;
+            align-items: flex-start; /* Mulai dari atas */
+            padding: 20px;
+            box-sizing: border-box;
+            gap: 30px; /* Jarak antara puzzle dan tombol */
+        }
+        
+        
+     </style>
+    <title>Puzzle Game</title>
+</head>
+
+<body>
+    <div id="app">
+        <div id="game-container"></div>
+    </div>
+    <script type="module" src="src/main.js"></script>
+</body>
+</html>
