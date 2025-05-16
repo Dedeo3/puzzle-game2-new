@@ -81,36 +81,39 @@ export class PreparationScene extends Phaser.Scene {
 
       const slideKey = slides[currentIndex];
 
-      if (slideKey === '2') {
+      // Tambahkan variabel loadingText
+      let loadingText;
+
+      if (slideKey === '2' || slideKey === '3') {
         if (isBgmPlaying) {
           this.sound.stopByKey('prepar');
           isBgmPlaying = false;
         }
 
-        currentMedia = this.add.video(width / 2, height * 0.45, '2')
+        // 1. Tampilkan teks loading
+        loadingText = this.add.text(width / 2, height * 0.45, 'Loading...', {
+          font: '24px Arial',
+          color: '#ffffff'
+        }).setOrigin(0.5);
+
+        // 2. Tambahkan video (tanpa langsung play di onCreate)
+        currentMedia = this.add.video(width / 2, height * 0.45, slideKey)
           .setOrigin(0.5)
           .on('play', function () {
+            // 3. Hapus teks loading saat video mulai
+            if (loadingText) {
+              loadingText.destroy();
+            }
+
             currentMedia.setDisplaySize(width * 0.6, height * 0.6);
           });
 
+        // 4. Play setelah sedikit delay agar loadingText terlihat
+        this.time.delayedCall(100, () => {
+          currentMedia.play(true);
+        });
 
-        currentMedia.play(true);
-      }else if(slideKey=== '3'){
-        if (isBgmPlaying) {
-          this.sound.stopByKey('prepar');
-          isBgmPlaying = false;
-        }
-
-        currentMedia = this.add.video(width / 2, height * 0.45, '3')
-          .setOrigin(0.5)
-          .on('play', function () {
-            currentMedia.setDisplaySize(width * 0.6, height * 0.6);
-          });
-
-
-        currentMedia.play(true);
-      }
-       else {
+      } else {
         if (!isBgmPlaying) {
           this.sound.play('prepar', {
             loop: true,
@@ -124,6 +127,7 @@ export class PreparationScene extends Phaser.Scene {
           .setOrigin(0.5);
       }
     };
+    
 
     // Initial slide display
     showCurrentSlide();
