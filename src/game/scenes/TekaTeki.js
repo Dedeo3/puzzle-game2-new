@@ -17,7 +17,7 @@ export class TekaTeki extends Scene {
         this.isMobile = this.sys.game.device.os.android || this.sys.game.device.os.iOS;
 
         const rows = 16;
-        const cols = 15;
+        const cols = 19;
         this.answerKey = Array.from({ length: rows }, () =>
             Array.from({ length: cols }, () => '')
         );
@@ -135,7 +135,7 @@ export class TekaTeki extends Scene {
         this.sound.play("tk", { loop: true, volume: 0.3 });
 
         // Calculate cell size based on screen size
-        const baseCellSize = isMobile ? 24 : 36;
+        const baseCellSize = isMobile ? 40 : 640;
         const maxGridWidth = gameWidth * (isMobile ? 0.8 : 0.6);
         const maxGridHeight = gameHeight * (isMobile ? 0.6 : 0.7);
 
@@ -303,6 +303,7 @@ export class TekaTeki extends Scene {
         const clueStyle = {
             font: '14px Arial',
             fill: '#333',
+            fontSize:"30px",
             wordWrap: {
                 width: 280,
                 useAdvancedWrap: true

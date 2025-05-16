@@ -8,24 +8,25 @@ export class PreparationScene extends Phaser.Scene {
     this.load.audio("klik", 'music/klik.wav');
     this.load.image("1", "assets/1.png");
     this.load.video('2', "assets/2.mp4");
-    this.load.image("3", "assets/3.png");
-    this.load.image("4", "assets/4.png");
-    this.load.image("5", "assets/5.png");
-    this.load.image("6", "assets/6.png");
-    this.load.image("7", "assets/7.png");
-    this.load.image("8", "assets/8.png");
-    this.load.image("9", "assets/9.png");
-    this.load.image("10", "assets/10.png");
-    this.load.image("11", "assets/11.png");
-    this.load.image("12", "assets/12.png");
-    this.load.image("13", "assets/13.png");
-    this.load.image("14", "assets/14.png");
-    this.load.image("15", "assets/15.png");
-    this.load.image("16", "assets/16.png");
-    this.load.image("17", "assets/17.png");
-    this.load.image("18", "assets/18.png");
-    this.load.image("19", "assets/19.png");
-    this.load.image("20", "assets/20.png");
+    this.load.video('3',"assets/video per.mp4")
+    this.load.image("4", "assets/3.png");
+    this.load.image("5", "assets/4.png");
+    this.load.image("6", "assets/5.png");
+    this.load.image("7", "assets/6.png");
+    this.load.image("8", "assets/7.png");
+    this.load.image("9", "assets/8.png");
+    this.load.image("10", "assets/9.png");
+    this.load.image("11", "assets/10.png");
+    this.load.image("12", "assets/11.png");
+    this.load.image("13", "assets/12.png");
+    this.load.image("14", "assets/13.png");
+    this.load.image("15", "assets/14.png");
+    this.load.image("16", "assets/15.png");
+    this.load.image("17", "assets/16.png");
+    this.load.image("18", "assets/17.png");
+    this.load.image("19", "assets/18.png");
+    this.load.image("20", "assets/19.png");
+    this.load.image("21", "assets/20.png");
     
     // Load additional UI assets
     // this.load.image('panel', 'assets/ui/panel.png'); // A semi-transparent panel for text
@@ -68,7 +69,7 @@ export class PreparationScene extends Phaser.Scene {
     // Add a background color or image
     this.add.rectangle(0, 0, width, height, 0x4a6fa5).setOrigin(0);
     
-    const slides = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
+    const slides = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20','21'];
     let currentIndex = 0;
     let currentMedia;
 
@@ -94,7 +95,22 @@ export class PreparationScene extends Phaser.Scene {
 
 
         currentMedia.play(true);
-      } else {
+      }else if(slideKey=== '3'){
+        if (isBgmPlaying) {
+          this.sound.stopByKey('prepar');
+          isBgmPlaying = false;
+        }
+
+        currentMedia = this.add.video(width / 2, height * 0.45, '3')
+          .setOrigin(0.5)
+          .on('play', function () {
+            currentMedia.setDisplaySize(width * 0.6, height * 0.6);
+          });
+
+
+        currentMedia.play(true);
+      }
+       else {
         if (!isBgmPlaying) {
           this.sound.play('prepar', {
             loop: true,

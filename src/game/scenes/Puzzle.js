@@ -40,7 +40,7 @@ export class Puzzle extends Scene {
     // Instruction text
     this.add.text(width / 2, height * 0.15, "Selesaikan potongan puzzle ini !!", {
       fontFamily: "Arial",
-      fontSize: `${Math.floor(height * 0.03)}px`,
+      fontSize: `${Math.floor(height * 0.05)}px`,
       color: "#ffffff",
       fontStyle: "bold",
     }).setOrigin(0.5);

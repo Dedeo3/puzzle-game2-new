@@ -40,7 +40,7 @@ export class Home extends Scene {
         // Title text
         const title = this.add.text(centerX, centerY - 120, 'PUZZLE QUEST GAME', {
             fontFamily: 'Georgia, serif',
-            fontSize: '42px',
+            fontSize: '50px',
             fontStyle: 'bold',
             color: '#ffffff',
             stroke: '#000000',
