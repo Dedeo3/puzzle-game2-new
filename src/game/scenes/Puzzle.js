@@ -10,11 +10,14 @@ export class Puzzle extends Scene {
   }
 
   preload() {
-    this.load.image("puzzle", "assets/paruu.jpg");
+    // this.load.image("puzzle", "assets/paruu.jpg");
+    for (let i = 1; i <= 9; i++) { // Misalnya 9 gambar berbeda
+      this.load.image(`puzzle${i}`, `assets/grid${i}.png`);
+    }
     this.load.image("background", "assets/bgPuz.jpg");
-    this.load.audio('puz','music/puz.mp3')
-    this.load.audio("klik",'music/klik.wav')
-    this.load.audio("swipe",'music/swipe.mp3')
+    this.load.audio('puz', 'music/puz.mp3')
+    this.load.audio("klik", 'music/klik.wav')
+    this.load.audio("swipe", 'music/swipe.mp3')
   }
 
   create() {
@@ -46,37 +49,25 @@ export class Puzzle extends Scene {
     }).setOrigin(0.5);
 
     const gridSize = this.gridSize;
-    
-    // Calculate puzzle size
     const puzzleSize = Math.min(width * 0.6, height * 0.6);
     const tileSize = Math.floor(puzzleSize / gridSize);
-    
+
     // Center the puzzle
     const startX = (width - tileSize * gridSize) / 2;
     const startY = (height - tileSize * gridSize) / 2 + height * 0.05;
 
     this.tileSize = tileSize;
-    
     this.startX = startX;
     this.startY = startY;
 
     // Create blue border around the entire puzzle
     this.add.rectangle(
-      width / 2, 
-      startY + (tileSize * gridSize) / 2, 
-      tileSize * gridSize + 4, 
-      tileSize * gridSize + 4, 
+      width / 2,
+      startY + (tileSize * gridSize) / 2,
+      tileSize * gridSize + 4,
+      tileSize * gridSize + 4,
       0x0088ff
     ).setStrokeStyle(4, 0x0088ff);
-
-    // Get the original image dimensions
-    const originalImage = this.textures.get("puzzle");
-    const imageWidth = originalImage.source[0].width;
-    const imageHeight = originalImage.source[0].height;
-
-    // Calculate crop dimensions
-    const cropWidth = Math.floor(imageWidth / gridSize);
-    const cropHeight = Math.floor(imageHeight / gridSize);
 
     let positions = [];
     for (let row = 0; row < gridSize; row++) {
@@ -97,7 +88,6 @@ export class Puzzle extends Scene {
       [positions[a], positions[b]] = [positions[b], positions[a]];
     }
 
-    // Initialize grid array
     this.grid = Array(gridSize).fill().map(() => Array(gridSize).fill(null));
 
     let index = 0;
@@ -110,36 +100,22 @@ export class Puzzle extends Scene {
         const x = this.getTileX(shuffledPos.col);
         const y = this.getTileY(shuffledPos.row);
 
-       const container = this.add.container(x, y)
-  .setSize(tileSize, tileSize)
-  .setInteractive(new Phaser.Geom.Rectangle(0, 0, tileSize, tileSize), Phaser.Geom.Rectangle.Contains);
-        // Create a background rectangle for each tile to cover the blue area
-        const tileBackground = this.add.rectangle(0, 0, tileSize, tileSize).setOrigin(0.5);
+        const container = this.add.container(x, y)
+          .setSize(tileSize, tileSize)
+          .setInteractive(new Phaser.Geom.Rectangle(0, 0, tileSize, tileSize), Phaser.Geom.Rectangle.Contains);
+
+        // Background tile
+        const tileBackground = this.add.rectangle(0, 0, tileSize, tileSize, 0x0088ff).setOrigin(0.5);
         container.add(tileBackground);
-        
-        // Add the puzzle piece image - now it will fill the entire tile space
-        // Ganti bagian pembuatan tile dengan ini:
-        // Ganti bagian pembuatan tile dengan ini:
-        const tile = this.add.image(0, 0, "puzzle")
-  .setCrop(
-    origCol * cropWidth,
-    origRow * cropHeight,
-    cropWidth,
-    cropHeight
-  )
-  .setDisplaySize(tileSize, tileSize)  // Ini akan memaksa gambar sesuai ukuran tile
-  .setOrigin(0.5);
 
-// Debugging - tampilkan ukuran aktual
-console.log("Actual tile display size:", tile.displayWidth, tile.displayHeight);
-
-          console.log("Image dimensions:", imageWidth, imageHeight);
-          console.log("Crop dimensions:", cropWidth, cropHeight);
-          console.log("Tile size:", tileSize);
-        
+        // Puzzle image
+        const tileIndex = origRow * this.gridSize + origCol + 1;
+        const tile = this.add.image(0, 0, `puzzle${tileIndex}`)
+          .setDisplaySize(tileSize - 2, tileSize - 2)
+          .setOrigin(0.5);
         container.add(tile);
-        
-        // Add a border to each tile
+
+        // Border
         const border = this.add.rectangle(0, 0, tileSize, tileSize, 0x000000, 0)
           .setStrokeStyle(1, 0xffffff);
         container.add(border);
@@ -150,13 +126,14 @@ console.log("Actual tile display size:", tile.displayWidth, tile.displayHeight);
 
         container.gridPos = { row: shuffledPos.row, col: shuffledPos.col };
         container.originalPos = { row: origRow, col: origCol };
-        
+        container.tileIndex = tileIndex;
+
         this.tiles.push(container);
         this.grid[shuffledPos.row][shuffledPos.col] = container;
       }
     }
 
-    // Create a background rectangle for the empty tile (to hide the blue)
+    // Empty tile
     const emptyTile = this.add.rectangle(
       this.getTileX(this.emptyPos.col),
       this.getTileY(this.emptyPos.row),
@@ -258,47 +235,6 @@ console.log("Actual tile display size:", tile.displayWidth, tile.displayHeight);
           ease: 'Power2'
         });
       });
-
-
-      // if ((dx === 1 && dy === 0) || (dx === 0 && dy === 1)) {
-      //   const newX = this.getTileX(this.emptyPos.col);
-      //   const newY = this.getTileY(this.emptyPos.row);
-
-      //   const oldEmpty = { ...this.emptyPos };
-      //   this.emptyPos = { ...gameObject.gridPos };
-      //   gameObject.gridPos = { ...oldEmpty };
-
-      //   this.grid[oldEmpty.row][oldEmpty.col] = gameObject;
-      //   this.grid[this.emptyPos.row][this.emptyPos.col] = null;
-
-      //   // Update the empty tile position
-      //   emptyTile.x = this.getTileX(this.emptyPos.col);
-      //   emptyTile.y = this.getTileY(this.emptyPos.row);
-
-      //   // Play sound
-      //   this.sound.play('swipe', {
-      //     volume: 6
-      //   });
-
-      //   this.tweens.add({
-      //     targets: gameObject,
-      //     x: newX,
-      //     y: newY,
-      //     duration: 200,
-      //     ease: 'Power2'
-      //   });
-      // } else {
-      //   const backX = this.getTileX(col);
-      //   const backY = this.getTileY(row);
-
-      //   this.tweens.add({
-      //     targets: gameObject,
-      //     x: backX,
-      //     y: backY,
-      //     duration: 200,
-      //     ease: 'Power2'
-      //   });
-      // }
     });
   }
 
@@ -306,9 +242,9 @@ console.log("Actual tile display size:", tile.displayWidth, tile.displayHeight);
     const clickSound = this.sound.add('klik');
     const width = this.scale.width;
     const height = this.scale.height;
-  
+
     const overlay = this.add.rectangle(width / 2, height / 2, width * 0.8, height * 0.6, 0x000000, 0.8).setDepth(20);
-  
+
     const helpText = this.add.text(width / 2, height / 2 - 40,
       "🎯 Tujuan:\nSusun potongan-potongan gambar hingga membentuk gambar utuh.\n\n🕹️ Cara Bermain:\nGeser ubin ke arah ruang kosong.\nUlangi sampai semua ubin berada di posisi semestinya.\n\n💡 Tips:\nMulai dari baris atas lalu susun ke bawah.",
       {
@@ -318,16 +254,16 @@ console.log("Actual tile display size:", tile.displayWidth, tile.displayHeight);
         align: "left",
         wordWrap: { width: width * 0.7 }
       }).setOrigin(0.5).setDepth(21);
-  
+
     const closeButton = this.add.rectangle(width / 2, height / 2 + height * 0.25 - 30, 120, 40, 0xff4444)
       .setInteractive().setDepth(22);
-  
+
     const closeButtonText = this.add.text(closeButton.x, closeButton.y, "Tutup", {
       fontFamily: "Arial",
       fontSize: "20px",
       color: "#ffffff"
     }).setOrigin(0.5).setDepth(23);
-  
+
     closeButton.on("pointerover", () => closeButton.setFillStyle(0xff6666));
     closeButton.on("pointerout", () => closeButton.setFillStyle(0xff4444));
     closeButton.on("pointerdown", () => {
@@ -349,11 +285,11 @@ console.log("Actual tile display size:", tile.displayWidth, tile.displayHeight);
 
   update(time, delta) {
     this.elapsedTime += delta / 1000;
-    
+
     const minutes = Math.floor(this.elapsedTime / 60);
     const seconds = Math.floor(this.elapsedTime % 60);
     const timeString = `Time: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    
+
     this.timeText.setText(timeString);
   }
 
@@ -363,8 +299,12 @@ console.log("Actual tile display size:", tile.displayWidth, tile.displayHeight);
     for (let tile of this.tiles) {
       const { row, col } = tile.gridPos;
       const { row: origRow, col: origCol } = tile.originalPos;
+      const currentImageKey = tile.list[1].texture.key;
+      const correctImageKey = `puzzle${tile.tileIndex}`;
 
-      if (row !== origRow || col !== origCol) {
+      if (row !== origRow || col !== origCol ||
+        currentImageKey !== correctImageKey ||
+        tile.list[1].angle % 360 !== 0) {
         isWin = false;
         break;
       }
@@ -409,14 +349,14 @@ console.log("Actual tile display size:", tile.displayWidth, tile.displayHeight);
       const centerY = this.scale.height / 2;
 
       const messageBox = this.add.rectangle(centerX, centerY, 400, 150, 0x000000, 0.8).setDepth(10);
-      
+
       const messageText = this.add.text(centerX, centerY, "Puzzle belum selesai!\nCoba lagi.", {
         fontFamily: 'Arial',
         fontSize: '24px',
         color: '#ffffff',
         align: 'center'
       }).setOrigin(0.5).setDepth(11);
-      
+
       this.time.delayedCall(2000, () => {
         this.tweens.add({
           targets: [messageBox, messageText],
