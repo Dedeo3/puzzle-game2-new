@@ -221,9 +221,10 @@ export class TekaTeki extends Scene {
                     const key = `${row},${col}`;
                     if (clueNumbers[key]) {
                         this.add.text(x + 2, y + 2, clueNumbers[key], {
-                            fontSize: `${Math.floor(cellSize * 0.3)}px`,
+                            fontSize: `${Math.floor(cellSize * 0.5)}px`,
                             color: '#000000',
                             fontFamily: 'Arial',
+                            fontStyle:'bold'
                         }).setOrigin(0);
                     }
 
