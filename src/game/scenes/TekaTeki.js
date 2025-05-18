@@ -135,9 +135,9 @@ export class TekaTeki extends Scene {
         this.sound.play("tk", { loop: true, volume: 0.3 });
 
         // Calculate cell size based on screen size
-        const baseCellSize = isMobile ? 40 : 640;
-        const maxGridWidth = gameWidth * (isMobile ? 0.8 : 0.6);
-        const maxGridHeight = gameHeight * (isMobile ? 0.6 : 0.7);
+        const baseCellSize = isMobile ? 45 : 60;
+        const maxGridWidth = gameWidth * (isMobile ? 0.95 : 0.85);
+        const maxGridHeight = gameHeight * (isMobile ? 0.7 : 0.8);
 
         const rows = this.answers.length;
         const cols = this.answers[0].length;
@@ -295,44 +295,114 @@ export class TekaTeki extends Scene {
             { no: 8, text: "Bagian darah yang mengangkut sari-sari makanan" }
         ];
 
-        const titleStyle = {
-            font: 'bold 16px Arial',
-            fill: '#8B0000',
-            padding: { bottom: 10 }
-        };
+        // Constants for styling
+        const tabWidth = 140;
+        const tabHeight = 35;
+        const clueWidth = 280;
+        const clueHeight = 450;
+        const fontSize = 17;
+        const questionSpacing = 20;
 
-        const clueStyle = {
-            font: '14px Arial',
-            fill: '#333',
-            fontSize:"30px",
-            wordWrap: {
-                width: 280,
-                useAdvancedWrap: true
-            },
-            lineSpacing: 5
-        };
-
-        const cluesBg = this.add.rectangle(x - 10, y - 10, 300, 500, 0xffffff)
+        // Create tab container and content area
+        const tabBg = this.add.rectangle(x - 10, y - 10, clueWidth + 20, clueHeight + tabHeight + 20, 0xffffff)
             .setOrigin(0)
             .setStrokeStyle(1, 0xdddddd)
             .setAlpha(0.9);
 
-        this.add.text(x, y, 'MENDATAR', titleStyle);
+        // Tab buttons
+        const tabMendatar = this.add.rectangle(x, y, tabWidth, tabHeight, 0x8B0000)
+            .setOrigin(0)
+            .setInteractive({ useHandCursor: true });
 
-        let currentY = y + 30;
+        const tabMenurun = this.add.rectangle(x + tabWidth, y, tabWidth, tabHeight, 0xBB5555)
+            .setOrigin(0)
+            .setInteractive({ useHandCursor: true });
+
+        // Tab text
+        const tabTextMendatar = this.add.text(x + tabWidth / 2, y + tabHeight / 2, 'MENDATAR', {
+            fontSize: '18px',
+            fontFamily: 'Arial',
+            fontStyle: 'bold',
+            fill: '#FFFFFF'
+        }).setOrigin(0.5);
+
+        const tabTextMenurun = this.add.text(x + tabWidth + tabWidth / 2, y + tabHeight / 2, 'MENURUN', {
+            fontSize: '18px',
+            fontFamily: 'Arial',
+            fontStyle: 'bold',
+            fill: '#FFFFFF'
+        }).setOrigin(0.5);
+
+        // Create content containers for clues
+        const contentY = y + tabHeight + 10;
+
+        // Container for Mendatar clues (visible by default)
+        const mendatarContainer = this.add.container(x, contentY);
+
+        // Container for Menurun clues (hidden by default)
+        const menurunContainer = this.add.container(x, contentY);
+        menurunContainer.setVisible(false);
+
+        // Style for clues
+        const clueStyle = {
+            fontSize: `${fontSize}px`,
+            fontFamily: 'Arial',
+            fill: '#333',
+            wordWrap: {
+                width: clueWidth,
+                useAdvancedWrap: true
+            },
+            lineSpacing: 6
+        };
+
+        // Add Mendatar clues to container
+        let currentY = 0;
         cluesMendatar.forEach(item => {
-            this.add.text(x, currentY, `${item.no}. ${item.text}`, clueStyle);
-            currentY += 35;
+            const clueText = this.add.text(0, currentY, `${item.no}. ${item.text}`, clueStyle);
+            mendatarContainer.add(clueText);
+
+            // Calculate next position
+            const actualHeight = clueText.height;
+            currentY += actualHeight + questionSpacing;
         });
 
-        currentY += 20;
-        this.add.text(x, currentY, 'MENURUN', titleStyle);
-        currentY += 30;
-
+        // Add Menurun clues to container
+        currentY = 0;
         cluesMenurun.forEach(item => {
-            this.add.text(x, currentY, `${item.no}. ${item.text}`, clueStyle);
-            currentY += 35;
+            const clueText = this.add.text(0, currentY, `${item.no}. ${item.text}`, clueStyle);
+            menurunContainer.add(clueText);
+
+            // Calculate next position
+            const actualHeight = clueText.height;
+            currentY += actualHeight + questionSpacing;
         });
+
+        // Tab switching logic
+        tabMendatar.on('pointerdown', () => {
+            // Activate Mendatar tab
+            tabMendatar.fillColor = 0x8B0000; // Dark red
+            tabMenurun.fillColor = 0xBB5555;  // Lighter red
+
+            // Show Mendatar content, hide Menurun
+            mendatarContainer.setVisible(true);
+            menurunContainer.setVisible(false);
+        });
+
+        tabMenurun.on('pointerdown', () => {
+            // Activate Menurun tab
+            tabMendatar.fillColor = 0xBB5555;  // Lighter red
+            tabMenurun.fillColor = 0x8B0000;   // Dark red
+
+            // Show Menurun content, hide Mendatar
+            mendatarContainer.setVisible(false);
+            menurunContainer.setVisible(true);
+        });
+
+        // Store references to containers and tabs in scene for later access if needed
+        this.mendatarContainer = mendatarContainer;
+        this.menurunContainer = menurunContainer;
+        this.tabMendatar = tabMendatar;
+        this.tabMenurun = tabMenurun;
     }
 
     createCluesMobile(x, y, width) {
