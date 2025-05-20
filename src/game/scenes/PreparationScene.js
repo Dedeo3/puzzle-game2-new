@@ -2,13 +2,13 @@ export class PreparationScene extends Phaser.Scene {
   constructor() {
     super("PreparationScene");
   }
-  
+
   preload() {
     this.load.audio('prepar', 'music/prepar.mp3');
     this.load.audio("klik", 'music/klik.wav');
     this.load.image("1", "assets/1.png");
     this.load.video('2', "assets/2.mp4");
-    this.load.video('3',"assets/video per.mp4")
+    this.load.video('3', "assets/video per.mp4")
     this.load.image("4", "assets/3.png");
     this.load.image("5", "assets/4.png");
     this.load.image("6", "assets/5.png");
@@ -27,7 +27,7 @@ export class PreparationScene extends Phaser.Scene {
     this.load.image("19", "assets/18.png");
     this.load.image("20", "assets/19.png");
     this.load.image("21", "assets/20.png");
-    
+
     // Load additional UI assets
     // this.load.image('panel', 'assets/ui/panel.png'); // A semi-transparent panel for text
     // this.load.image('button', 'assets/ui/button.png'); // A nice button texture
@@ -42,36 +42,54 @@ export class PreparationScene extends Phaser.Scene {
       volume: 0.5
     });
     const clickSound = this.sound.add('klik');
-    
+
     const width = this.scale.width;
     const height = this.scale.height;
 
     const background = this.add.graphics();
-        background.fillGradientStyle(
-            0x1a237e, // Dark blue (top)
-            0x1a237e, // Dark blue (top)
-            0x7e57c2, // Purple (bottom)
-            0x7e57c2, // Purple (bottom)
-            1
-        );
-        background.fillRect(0, 0, this.scale.width, this.scale.height);
+    background.fillGradientStyle(
+      0x1a237e, // Dark blue (top)
+      0x1a237e, // Dark blue (top)
+      0x7e57c2, // Purple (bottom)
+      0x7e57c2, // Purple (bottom)
+      1
+    );
+    background.fillRect(0, 0, this.scale.width, this.scale.height);
 
-     const titlePanel = this.add.graphics();
+    const titlePanel = this.add.graphics();
     titlePanel.fillStyle(0xffffff, 0.2);
     titlePanel.lineStyle(2, 0xffffff, 1);
     titlePanel.fillRoundedRect(width * 0.2, height * 0.05, width * 0.6, height * 0.1, 15);
     titlePanel.strokeRoundedRect(width * 0.2, height * 0.05, width * 0.6, height * 0.1, 15);
 
-     const arrowSize = height * 0.08;
+    const arrowSize = height * 0.08;
     const arrowColor = 0xf97316;
     const arrowHoverColor = 0xff8c00;
 
-    // Add a background color or image
-    this.add.rectangle(0, 0, width, height, 0x4a6fa5).setOrigin(0);
-    
-    const slides = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20','21'];
+    const slides = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21'];
     let currentIndex = 0;
     let currentMedia;
+
+    // Page indicator
+    let pageIndicator;
+
+    // Function to update page indicator
+    const updatePageIndicator = () => {
+      if (pageIndicator) {
+        pageIndicator.destroy();
+      }
+      pageIndicator = this.add.text(
+        width / 2,
+        height * 0.75,
+        `${currentIndex + 1}/${slides.length}`,
+        {
+          fontFamily: "Arial, sans-serif",
+          fontSize: `${Math.floor(height * 0.030)}px`,
+          color: "#000000FF",
+          fontStyle:'bold'
+        }
+      ).setOrigin(0.5);
+    };
 
     // Function to display the current slide
     const showCurrentSlide = () => {
@@ -81,7 +99,7 @@ export class PreparationScene extends Phaser.Scene {
 
       const slideKey = slides[currentIndex];
 
-      // Tambahkan variabel loadingText
+      // Variable for loading text
       let loadingText;
 
       if (slideKey === '2' || slideKey === '3') {
@@ -90,17 +108,17 @@ export class PreparationScene extends Phaser.Scene {
           isBgmPlaying = false;
         }
 
-        // 1. Tampilkan teks loading
+        // 1. Show loading text
         loadingText = this.add.text(width / 2, height * 0.45, 'Loading...', {
           font: '24px Arial',
           color: '#ffffff'
         }).setOrigin(0.5);
 
-        // 2. Tambahkan video (tanpa langsung play di onCreate)
+        // 2. Add video (without playing immediately)
         currentMedia = this.add.video(width / 2, height * 0.45, slideKey)
           .setOrigin(0.5)
           .on('play', function () {
-            // 3. Hapus teks loading saat video mulai
+            // 3. Remove loading text when video starts
             if (loadingText) {
               loadingText.destroy();
             }
@@ -108,7 +126,7 @@ export class PreparationScene extends Phaser.Scene {
             currentMedia.setDisplaySize(width * 0.6, height * 0.6);
           });
 
-        // 4. Play setelah sedikit delay agar loadingText terlihat
+        // 4. Play after a slight delay so loading text is visible
         this.time.delayedCall(100, () => {
           currentMedia.play(true);
         });
@@ -126,16 +144,72 @@ export class PreparationScene extends Phaser.Scene {
           .setDisplaySize(width * 0.6, height * 0.6)
           .setOrigin(0.5);
       }
+
+      // Update page indicator
+      updatePageIndicator();
+
+      // Tambahkan tombol ke scene
+      const downloadButton = this.add.text(width - 180, height - 60, '📥 Unduh Panduan', {
+        fontFamily: 'Arial',
+        fontSize: '15px',
+        backgroundColor: '#4CAF50',
+        color: '#ffffff',
+        padding: { left: 12, right: 12, top: 8, bottom: 8 },
+        align: 'center',
+        fixedWidth: 160,
+      })
+        .setOrigin(0.5)
+        .setInteractive({ useHandCursor: true })
+        .on('pointerover', function () {
+          this.setStyle({ backgroundColor: '#45a049' });
+        })
+        .on('pointerout', function () {
+          this.setStyle({ backgroundColor: '#4CAF50' });
+        })
+        .on('pointerdown', () => {
+          clickSound.play();
+          downloadFile();
+      });
+
     };
+    function downloadFile() {
+      const link = document.createElement('a');
+      link.href = 'assets/file/guide.pdf'; // Ganti dengan file panduan kamu
+      link.download = 'Panduan_Sistem_Pernapasan.pdf';
+      link.click();
+    }
     
+  
+
+    // Function to draw arrow
+    function drawArrow(graphics, x, y, width, height, color, direction) {
+      graphics.clear();
+      graphics.fillStyle(color);
+      graphics.lineStyle(2, 0x000000, 0.5);
+
+      if (direction === 'left') {
+        // Left arrow (points to the left)
+        graphics.beginPath();
+        graphics.moveTo(x, y + height / 2);          // Puncak segitiga (kiri)
+        graphics.lineTo(x + width, y);             // Sudut kanan atas
+        graphics.lineTo(x + width, y + height);    // Sudut kanan bawah
+        graphics.closePath();
+      } else {
+        // Right arrow (points to the right)
+        graphics.beginPath();
+        graphics.moveTo(x + width, y + height / 2);  // Puncak segitiga (kanan)
+        graphics.lineTo(x, y);                     // Sudut kiri atas
+        graphics.lineTo(x, y + height);            // Sudut kiri bawah
+        graphics.closePath();
+      }
+
+      graphics.fillPath();
+      graphics.strokePath();
+    }
 
     // Initial slide display
     showCurrentSlide();
 
-    // Add a panel for the title
-    // const titlePanel = this.add.rectangle(width / 2, height * 0.1, width * 0.6, height * 0.1, 0xffffff, 0.2)
-    //   .setStrokeStyle(2, 0xffffff);
-    
     // Title with better styling
     this.add.text(width / 2, height * 0.08, "Preparation Time", {
       fontFamily: "'Arial Black', Arial, sans-serif",
@@ -170,7 +244,7 @@ export class PreparationScene extends Phaser.Scene {
     // Subject title (Sistem Pernapasan Manusia)
     const subjectPanel = this.add.rectangle(width / 2, height * 0.9, width * 0.4, height * 0.08, 0xffffff, 0.2)
       .setStrokeStyle(2, 0xffffff);
-    
+
     this.add.text(width / 2, height * 0.88, "Sistem Pernapasan Manusia", {
       fontFamily: "Arial, sans-serif",
       fontSize: `${Math.floor(height * 0.03)}px`,
@@ -184,95 +258,77 @@ export class PreparationScene extends Phaser.Scene {
       color: "#ffffff"
     }).setOrigin(0.5);
 
-    // Arrow Buttons with better styling
-    // const arrowSize = height * 0.08;
+    // Create arrow buttons using graphics
+    // Left Arrow Button
+    const leftBtn = this.add.graphics();
+    drawArrow(leftBtn, width * 0.1 - arrowSize / 2, height / 2 - arrowSize / 2, arrowSize, arrowSize, arrowColor, 'left');
 
-      const leftBtn = this.add.graphics();
-    drawArrow(leftBtn, 0, 0, arrowSize, arrowSize, arrowColor, Math.PI);
-    leftBtn.setPosition(width * 0.1, height / 2);
-    leftBtn.setInteractive(new Phaser.Geom.Triangle(), Phaser.Geom.Triangle.Contains);
+    // Create hitbox for left button
+    const leftHitbox = new Phaser.Geom.Rectangle(
+      width * 0.1 - arrowSize / 2,
+      height / 2 - arrowSize / 2,
+      arrowSize,
+      arrowSize
+    );
+    leftBtn.setInteractive(leftHitbox, Phaser.Geom.Rectangle.Contains);
 
     // Right Arrow Button
     const rightBtn = this.add.graphics();
-    drawArrow(rightBtn, 0, 0, arrowSize, arrowSize, arrowColor, 0);
-    rightBtn.setPosition(width * 0.9, height / 2);
-    rightBtn.setInteractive(new Phaser.Geom.Triangle(), Phaser.Geom.Triangle.Contains);
+    drawArrow(rightBtn, width * 0.9 - arrowSize / 2, height / 2 - arrowSize / 2, arrowSize, arrowSize, arrowColor, 'right');
 
-    // Left Button
-    // const leftBtn = this.add.image(width * 0.1, height / 2, 'arrow')
-    //   .setDisplaySize(arrowSize, arrowSize)
-    //   .setFlipX(true)
-    //   .setInteractive();
-    
-    // // Right Button
-    // const rightBtn = this.add.image(width * 0.9, height / 2, 'arrow')
-    //   .setDisplaySize(arrowSize, arrowSize)
-    //   .setInteractive();
+    // Create hitbox for right button
+    const rightHitbox = new Phaser.Geom.Rectangle(
+      width * 0.9 - arrowSize / 2,
+      height / 2 - arrowSize / 2,
+      arrowSize,
+      arrowSize
+    );
+    rightBtn.setInteractive(rightHitbox, Phaser.Geom.Rectangle.Contains);
 
-     function drawArrow(graphics, x, y, width, height, color, rotation) {
-      graphics.clear();
-      graphics.fillStyle(color);
-      graphics.lineStyle(2, 0x000000, 0.5);
-      
-      graphics.save();
-      graphics.translateCanvas(x, y);
-      graphics.rotateCanvas(rotation);
-      
-      graphics.beginPath();
-      graphics.moveTo(width/2, 0);
-      graphics.lineTo(0, height);
-      graphics.lineTo(width, height);
-      graphics.closePath();
-      graphics.fillPath();
-      graphics.strokePath();
-      
-      graphics.restore();
-    }
-
-    // Play Button dengan efek modern
+    // Play Button with modern effect
     const playBtn = this.add.graphics();
     const playBtnWidth = width * 0.2;
     const playBtnHeight = height * 0.08;
-    
-    // Fungsi untuk menggambar button
+
+    // Function to draw the button
     const drawPlayButton = (color, yOffset = 0) => {
       playBtn.clear();
-      
+
       // Shadow
       playBtn.fillStyle(0x000000, 0.3);
       playBtn.fillRoundedRect(
-        width/2 - playBtnWidth/2 + 3, 
-        height * 0.8 - playBtnHeight/2 + yOffset + 3, 
-        playBtnWidth, 
-        playBtnHeight, 
+        width / 2 - playBtnWidth / 2 + 3,
+        height * 0.8 - playBtnHeight / 2 + yOffset + 3,
+        playBtnWidth,
+        playBtnHeight,
         10
       );
-      
+
       // Button
       playBtn.fillStyle(color);
       playBtn.lineStyle(2, 0xffffff, 0.8);
       playBtn.fillRoundedRect(
-        width/2 - playBtnWidth/2, 
-        height * 0.8 - playBtnHeight/2 + yOffset, 
-        playBtnWidth, 
-        playBtnHeight, 
+        width / 2 - playBtnWidth / 2,
+        height * 0.8 - playBtnHeight / 2 + yOffset,
+        playBtnWidth,
+        playBtnHeight,
         10
       );
       playBtn.strokeRoundedRect(
-        width/2 - playBtnWidth/2, 
-        height * 0.8 - playBtnHeight/2 + yOffset, 
-        playBtnWidth, 
-        playBtnHeight, 
+        width / 2 - playBtnWidth / 2,
+        height * 0.8 - playBtnHeight / 2 + yOffset,
+        playBtnWidth,
+        playBtnHeight,
         10
       );
-      
+
       // Highlight
       playBtn.fillStyle(0xffffff, 0.2);
       playBtn.fillRoundedRect(
-        width/2 - playBtnWidth/2 + 2, 
-        height * 0.8 - playBtnHeight/2 + yOffset + 2, 
-        playBtnWidth - 4, 
-        playBtnHeight * 0.5, 
+        width / 2 - playBtnWidth / 2 + 2,
+        height * 0.8 - playBtnHeight / 2 + yOffset + 2,
+        playBtnWidth - 4,
+        playBtnHeight * 0.5,
         8
       );
     };
@@ -280,50 +336,45 @@ export class PreparationScene extends Phaser.Scene {
     drawPlayButton(0xf97316);
     playBtn.setInteractive(
       new Phaser.Geom.Rectangle(
-        width/2 - playBtnWidth/2, 
-        height * 0.8 - playBtnHeight/2, 
-        playBtnWidth, 
+        width / 2 - playBtnWidth / 2,
+        height * 0.8 - playBtnHeight / 2,
+        playBtnWidth,
         playBtnHeight
-      ), 
+      ),
       Phaser.Geom.Rectangle.Contains
     );
 
-    // Button hover effects
-    const setButtonHover = (btn, color, hoverColor, drawFunc) => {
-      btn.on("pointerover", () => {
-        drawFunc(hoverColor, -2); // Sedikit naik saat hover
-        this.input.setDefaultCursor("pointer");
-      });
-      btn.on("pointerout", () => {
-        drawFunc(color, 0);
-        this.input.setDefaultCursor("default");
-      });
-    };
-    
-
-    setButtonHover(leftBtn, arrowColor, arrowHoverColor, (color) => {
-      drawArrow(leftBtn, 0, 0, arrowSize, arrowSize, color, Math.PI);
+    // Button hover effects for arrows
+    leftBtn.on("pointerover", () => {
+      drawArrow(leftBtn, width * 0.1 - arrowSize / 2, height / 2 - arrowSize / 2, arrowSize, arrowSize, arrowHoverColor, 'left');
+      this.input.setDefaultCursor("pointer");
     });
-    
-    setButtonHover(rightBtn, arrowColor, arrowHoverColor, (color) => {
-      drawArrow(rightBtn, 0, 0, arrowSize, arrowSize, color, 0);
-    });
-    
-    setButtonHover(playBtn, 0xf97316, 0xff8c00, drawPlayButton);
 
-    // Button hover effects
-    // const setButtonHover = (btn) => {
-    //   btn.on("pointerover", () => {
-    //     btn.setScale(1.1);
-    //     this.input.setDefaultCursor("pointer");
-    //   });
-    //   btn.on("pointerout", () => {
-    //     btn.setScale(1);
-    //     this.input.setDefaultCursor("default");
-    //   });
-    // };
-    setButtonHover(leftBtn);
-    setButtonHover(rightBtn);
+    leftBtn.on("pointerout", () => {
+      drawArrow(leftBtn, width * 0.1 - arrowSize / 2, height / 2 - arrowSize / 2, arrowSize, arrowSize, arrowColor, 'left');
+      this.input.setDefaultCursor("default");
+    });
+
+    rightBtn.on("pointerover", () => {
+      drawArrow(rightBtn, width * 0.9 - arrowSize / 2, height / 2 - arrowSize / 2, arrowSize, arrowSize, arrowHoverColor, 'right');
+      this.input.setDefaultCursor("pointer");
+    });
+
+    rightBtn.on("pointerout", () => {
+      drawArrow(rightBtn, width * 0.9 - arrowSize / 2, height / 2 - arrowSize / 2, arrowSize, arrowSize, arrowColor, 'right');
+      this.input.setDefaultCursor("default");
+    });
+
+    // Play button hover effects
+    playBtn.on("pointerover", () => {
+      drawPlayButton(0xff8c00, -2); // Slightly raised on hover
+      this.input.setDefaultCursor("pointer");
+    });
+
+    playBtn.on("pointerout", () => {
+      drawPlayButton(0xf97316, 0);
+      this.input.setDefaultCursor("default");
+    });
 
     // Navigation functions
     const goToPreviousSlide = () => {
@@ -346,11 +397,6 @@ export class PreparationScene extends Phaser.Scene {
     this.input.keyboard.on('keydown-LEFT', goToPreviousSlide);
     this.input.keyboard.on('keydown-RIGHT', goToNextSlide);
 
-    // Play Button with better styling
-    // const playBtn = this.add.image(width / 2, height * 0.8, 'button')
-    //   .setDisplaySize(width * 0.2, height * 0.08)
-    //   .setInteractive();
-    
     this.add.text(width / 2, height * 0.8, "Play", {
       fontFamily: "'Arial Black', Arial, sans-serif",
       fontSize: `${height * 0.035}px`,
@@ -359,36 +405,14 @@ export class PreparationScene extends Phaser.Scene {
       strokeThickness: 3
     }).setOrigin(0.5);
 
-    setButtonHover(playBtn);
     playBtn.on("pointerdown", () => {
       clickSound.play();
-      playBtn.setScale(0.95);
+      drawPlayButton(0xf97316, 2); // Press down effect
       this.time.delayedCall(100, () => {
-        playBtn.setScale(1);
+        drawPlayButton(0xf97316, 0);
         this.sound.stopByKey('prepar');
         this.scene.start("Puzzle");
       });
     });
-
-    // Add page indicator
-    // const updatePageIndicator = () => {
-    //   if (this.pageIndicator) {
-    //     this.pageIndicator.destroy();
-    //   }
-    //   this.pageIndicator = this.add.text(
-    //     width / 2, 
-    //     height * 0.75, 
-    //     `${currentIndex + 1}/${slides.length}`, 
-    //     {
-    //       fontFamily: "Arial, sans-serif",
-    //       fontSize: `${Math.floor(height * 0.025)}px`,
-    //       color: "#ffffff"
-    //     }
-    //   ).setOrigin(0.5);
-    // };
-    
-    // updatePageIndicator();
-    this.showCurrentSlide = showCurrentSlide;
-    this.updatePageIndicator = updatePageIndicator;
   }
 }

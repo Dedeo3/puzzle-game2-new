@@ -16,93 +16,95 @@ export class TekaTeki extends Scene {
         this.gameHeight = this.sys.game.config.height;
         this.isMobile = this.sys.game.device.os.android || this.sys.game.device.os.iOS;
 
-        const rows = 16;
-        const cols = 19;
+        const rows = 14;
+        const cols = 18;
         this.answerKey = Array.from({ length: rows }, () =>
             Array.from({ length: cols }, () => '')
         );
 
+
         this.daftarkata = [
             {
                 no: 1,
-                kata: 'ANEMIA',
-                petunjuk: 'Penderita yang biasanya merasa lemah, mudah letih, dan wajahnya pucat',
-                row: 0,
-                col: 6,
-                arah: 'MENURUN'
-            },
-            {
-                no: 2,
-                kata: 'JANTUNGKOLONER',
-                petunjuk: 'Penyakit yang disebabkan karena tersumbatnya aliran darah ke jantung',
-                row: 1,
+                kata: 'LARING',
+                petunjuk: 'Yang menghubungkan faring dan trakea adalah',
+                row: 2,
                 col: 1,
                 arah: 'MENDATAR'
             },
             {
-                no: 3,
-                kata: 'TRANSFUSIDARAH',
-                petunjuk: 'Pemberian darah dari satu orang ke orang lain',
-                row: 1,
+                no: 2,
+                kata: 'INFLUENZA',
+                petunjuk: 'Gangguan sistem pernafasan yang bergejala batuk pilek demam adalah',
+                row: 2,
                 col: 4,
+                arah: 'MENURUN'
+            },
+            {
+                no: 3,
+                kata: 'DIAFRAGMA',
+                petunjuk: 'Rongga dada dan rongga perut di batasi oleh',
+                row: 0,
+                col: 12,
                 arah: 'MENURUN'
             },
             {
                 no: 4,
-                kata: 'PLASMADARAH',
-                petunjuk: 'Cairan berwarna kuning keruh yang mengandung sari makanan',
-                row: 3,
-                col: 2,
-                arah: 'MENDATAR'
-            },
-            {
-                no: 5,
-                kata: 'KEPINGDARAH',
-                petunjuk: 'Sel darah yang berperan dalam pembekuan darah',
-                row: 5,
+                kata: 'PARUPARU',
+                petunjuk: 'Organ pernafasan manusia',
+                row: 2,
                 col: 0,
                 arah: 'MENURUN'
             },
             {
+                no: 5,
+                kata: 'OLAHRAGA',
+                petunjuk: 'Cara menjaga organ pernafasan manusia adalah',
+                row: 2,
+                col: 7,
+                arah: 'MENDATAR'
+            },
+            {
                 no: 6,
-                kata: 'BILIKKANAN',
-                petunjuk: 'Bagian jantung yang memompa darah ke paru - paru',
-                row: 6,
-                col: 11,
+                kata: 'HIDUNG',
+                petunjuk: 'Alat pernafasan yang berfungsi menyaring udara',
+                row: 2,
+                col: 10,
                 arah: 'MENURUN'
             },
             {
                 no: 7,
-                kata: 'PEMBULUHKAPILER',
-                petunjuk: 'Pembuluh yang menghubungkan pembuluh nadi dan pembuluh balik',
-                row: 7,
-                col: 0,
-                arah: 'MENDATAR'
-            },
-            {
-                no: 8,
-                kata: 'ERITROSIT',
-                petunjuk: 'Bagian darah yang berfungsi mengangkut sari - sari makanan',
-                row: 7,
-                col: 13,
+                kata: 'BRONKUS',
+                petunjuk: 'Saluran pernafasan sebelum bronkiolus',
+                row: 2,
+                col: 15,
                 arah: 'MENURUN'
             },
             {
+                no: 8,
+                kata: 'UMUR',
+                petunjuk: 'Frekuensi pernafasan dipengaruhi oleh',
+                row: 6,
+                col: 4,
+                arah: 'MENDATAR'
+            },
+            {
                 no: 9,
-                kata: 'GINJAL',
-                petunjuk: 'Organ yang berperan dalam mengatur tekanan darah, produksi sel darah merah dan kadar elektrolit',
-                row: 9,
-                col: 3,
+                kata: 'TRAKEA',
+                petunjuk: 'Salah satu organ tubuh dalam sistem pernafasan',
+                row: 10,
+                col: 2,
                 arah: 'MENDATAR'
             },
             {
                 no: 10,
-                kata: 'AORTA',
-                petunjuk: 'Pembuluh nadi terbesar keluar dari bilik kiri ke jantung',
-                row: 13,
-                col: 4,
+                kata: 'Asma',
+                petunjuk: 'Penyakit yang disebabkan oleh penyempitan bronkiolus sehingga penderita kesulitan bernafas ',
+                row: 10,
+                col: 7,
                 arah: 'MENDATAR'
-            },
+            }
+
         ];
 
         this.daftarkata.forEach(item => {
@@ -280,28 +282,29 @@ export class TekaTeki extends Scene {
 
     createCluesDesktop(x, y) {
         const cluesMendatar = [
-            { no: 2, text: "Penyakit karena tersumbatnya aliran darah ke jantung" },
-            { no: 4, text: "Cairan kuning keruh yang mengandung sari makanan" },
-            { no: 7, text: "Pembuluh penghubung pembuluh nadi dan pembuluh balik" },
-            { no: 9, text: "Organ pengatur tekanan darah dan produksi sel darah merah" },
-            { no: 10, text: "Pembuluh nadi terbesar dari bilik kiri jantung" }
+            { no: 1, text: "Yang menghubungkan faring dan trakea adalah " },
+            { no: 5, text: "Cara menjaga organ pernafasan manusia adalah " },
+            { no: 9, text: "Salah satu organ tubuh dalam sistem pernafasan " },
+            { no: 8, text: "Frekuensi pernafasan dipengaruhi oleh" },
+            { no: 10, text: "Penyakit yang disebabkan oleh penyempitan bronkiolus sehingga penderita kesulitan bernafas " },
         ];
 
         const cluesMenurun = [
-            { no: 1, text: "Kondisi dengan gejala lemah, letih, dan wajah pucat" },
-            { no: 3, text: "Proses pemberian darah ke orang lain" },
-            { no: 5, text: "Sel darah untuk pembekuan darah" },
-            { no: 6, text: "Bagian jantung yang memompa darah ke paru-paru" },
-            { no: 8, text: "Bagian darah yang mengangkut sari-sari makanan" }
+            { no: 2, text: "Gangguan sistem pernafasan yang bergejala batuk pilek demam adalah" },
+            { no: 3, text: "Rongga dada dan rongga perut di batasi oleh " },
+            { no: 4, text: "Organ pernafasan manusia" },
+            { no: 6, text: "Alat pernafasan yang berfungsi menyaring udara" },
+            { no: 7, text: "Saluran pernafasan sebelum bronkiolus" },
+            
         ];
 
         // Constants for styling
         const tabWidth = 140;
         const tabHeight = 35;
-        const clueWidth = 280;
+        const clueWidth = 290;
         const clueHeight = 450;
         const fontSize = 17;
-        const questionSpacing = 20;
+        const questionSpacing = 15;
 
         // Create tab container and content area
         const tabBg = this.add.rectangle(x - 10, y - 10, clueWidth + 20, clueHeight + tabHeight + 20, 0xffffff)
@@ -352,13 +355,15 @@ export class TekaTeki extends Scene {
                 width: clueWidth,
                 useAdvancedWrap: true
             },
-            lineSpacing: 6
+            lineSpacing: 6,
+            align:"start",
+        
         };
 
         // Add Mendatar clues to container
         let currentY = 0;
         cluesMendatar.forEach(item => {
-            const clueText = this.add.text(0, currentY, `${item.no}. ${item.text}`, clueStyle);
+            const clueText = this.add.text(10, currentY, `${item.no}. ${item.text}`, clueStyle);
             mendatarContainer.add(clueText);
 
             // Calculate next position
@@ -369,7 +374,7 @@ export class TekaTeki extends Scene {
         // Add Menurun clues to container
         currentY = 0;
         cluesMenurun.forEach(item => {
-            const clueText = this.add.text(0, currentY, `${item.no}. ${item.text}`, clueStyle);
+            const clueText = this.add.text(10, currentY, `${item.no}. ${item.text}`, clueStyle);
             menurunContainer.add(clueText);
 
             // Calculate next position
