@@ -35,12 +35,31 @@ export class PreparationScene extends Phaser.Scene {
   }
 
   create() {
-    // Play background music
+    // Check if scene was opened from URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetScene = urlParams.get('scene');
+    const fromTekaTeki = localStorage.getItem('returnFromTekaTeki') === 'true';
+
+    // Play background music based on how scene was loaded
     let isBgmPlaying = true;
-    this.sound.play('prepar', {
-      loop: true,
-      volume: 0.5
-    });
+
+    // If scene was loaded from URL parameter with '?scene=PreparationScene' or from TekaTeki, don't play BGM
+    if ((targetScene === 'PreparationScene') || fromTekaTeki) {
+      console.log('Scene loaded from URL parameter or TekaTeki, BGM disabled');
+      isBgmPlaying = false;
+
+      // Clear the localStorage flag if it exists
+      if (fromTekaTeki) {
+        localStorage.removeItem('returnFromTekaTeki');
+      }
+    } else {
+      // Normal background music playback
+      this.sound.play('prepar', {
+        loop: true,
+        volume: 0.5
+      });
+    }
+
     const clickSound = this.sound.add('klik');
 
     const width = this.scale.width;
@@ -86,7 +105,7 @@ export class PreparationScene extends Phaser.Scene {
           fontFamily: "Arial, sans-serif",
           fontSize: `${Math.floor(height * 0.030)}px`,
           color: "#000000FF",
-          fontStyle:'bold'
+          fontStyle: 'bold'
         }
       ).setOrigin(0.5);
     };
@@ -132,7 +151,7 @@ export class PreparationScene extends Phaser.Scene {
         });
 
       } else {
-        if (!isBgmPlaying) {
+        if (!isBgmPlaying && !(targetScene === 'PreparationScene' || fromTekaTeki)) {
           this.sound.play('prepar', {
             loop: true,
             volume: 0.5
@@ -169,7 +188,7 @@ export class PreparationScene extends Phaser.Scene {
         .on('pointerdown', () => {
           clickSound.play();
           downloadFile();
-      });
+        });
 
     };
     function downloadFile() {
@@ -178,8 +197,8 @@ export class PreparationScene extends Phaser.Scene {
       link.download = 'Panduan_Sistem_Pernapasan.pdf';
       link.click();
     }
-    
-  
+
+
 
     // Function to draw arrow
     function drawArrow(graphics, x, y, width, height, color, direction) {

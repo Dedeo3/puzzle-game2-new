@@ -226,7 +226,7 @@ export class TekaTeki extends Scene {
                             fontSize: `${Math.floor(cellSize * 0.5)}px`,
                             color: '#000000',
                             fontFamily: 'Arial',
-                            fontStyle:'bold'
+                            fontStyle: 'bold'
                         }).setOrigin(0);
                     }
 
@@ -257,8 +257,15 @@ export class TekaTeki extends Scene {
             gridY + gridHeight + 250 : // below grid for mobile 
             gridY + gridHeight - 200; // bottom of grid for desktop
 
+        // Create submit button
         this.createCheckButton(buttonX, buttonY);
-    
+
+        // Create "Lihat Materi" button below the submit button
+        // Calculate position for "Lihat Materi" button (below submit button)
+        const materiButtonX = buttonX;
+        const materiButtonY = buttonY + 60; // 60 pixels below the submit button
+
+        this.createLihatMateri(materiButtonX, materiButtonY);
     }
 
     createHeader() {
@@ -278,6 +285,8 @@ export class TekaTeki extends Scene {
             fontStyle: 'bold',
             wordWrap: { width: headerWidth - 40 }
         }).setOrigin(0.5);
+
+
     }
 
     createCluesDesktop(x, y) {
@@ -486,6 +495,40 @@ export class TekaTeki extends Scene {
         button.on('pointerdown', () => {
             this.checkAnswers();
         });
+    }
+
+    createLihatMateri(x, y) {
+        const buttonWidth = this.isMobile ? 120 : 160;
+        const buttonHeight = this.isMobile ? 40 : 45;
+        const fontSize = this.isMobile ? '14px' : '16px';
+
+        const button = this.add.rectangle(x, y, buttonWidth, buttonHeight, 0x45a049)
+            .setInteractive()
+            .setOrigin(0.5)
+            .setStrokeStyle(2, 0x000000);
+
+        this.add.text(x, y, 'Check material', {
+            fontSize: fontSize,
+            color: '#FFFFFF',
+            fontFamily: 'Arial',
+            fontStyle: 'bold'
+        }).setOrigin(0.5);
+
+        button.on('pointerdown', () => {
+            this.checkMateri();
+        });
+    }
+
+
+    checkMateri() {
+        // Store the target scene name in localStorage
+        localStorage.setItem('targetScene', 'PreparationScene');
+
+        // Get the base URL of your application
+        const baseUrl = window.location.origin + window.location.pathname;
+
+        // Open a new tab with a query parameter to indicate which scene to start
+        window.open(baseUrl + '?scene=PreparationScene', '_blank');
     }
 
     checkAnswers() {

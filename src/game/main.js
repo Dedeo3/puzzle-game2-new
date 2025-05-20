@@ -31,7 +31,26 @@ const config = {
 
 
 const StartGame = (parent) => {
-    return new Game({ ...config, parent });
+    const game = new Game({ ...config, parent });
+
+    // Check if there's a scene parameter in the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetScene = urlParams.get('scene');
+
+    if (targetScene) {
+        // Wait for the game to be ready before starting the target scene
+        game.events.once('ready', () => {
+            // Stop the default scene (usually the first one)
+            game.scene.stop('Home');
+
+            // Start the requested scene
+            game.scene.start(targetScene);
+
+            console.log(`Started scene: ${targetScene}`);
+        });
+    }
+
+    return game;
 }
 
 export default StartGame;
