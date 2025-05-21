@@ -26,59 +26,59 @@ export class TekaTeki extends Scene {
         this.daftarkata = [
             {
                 no: 1,
-                kata: 'LARING',
-                petunjuk: 'Yang menghubungkan faring dan trakea adalah',
-                row: 2,
-                col: 1,
-                arah: 'MENDATAR'
+                kata: 'OLAHRAGA',
+                petunjuk: 'Cara menjaga organ pernafasan manusia adalah',
+                row: 0,
+                col: 2,
+                arah: 'MENURUN'
             },
             {
                 no: 2,
-                kata: 'INFLUENZA',
-                petunjuk: 'Gangguan sistem pernafasan yang bergejala batuk pilek demam adalah',
-                row: 2,
-                col: 4,
+                kata: 'PARUPARU',
+                petunjuk: 'Organ pernafasan manusia',
+                row: 0,
+                col: 9,
                 arah: 'MENURUN'
             },
             {
                 no: 3,
-                kata: 'DIAFRAGMA',
-                petunjuk: 'Rongga dada dan rongga perut di batasi oleh',
-                row: 0,
-                col: 12,
-                arah: 'MENURUN'
-            },
-            {
-                no: 4,
-                kata: 'PARUPARU',
-                petunjuk: 'Organ pernafasan manusia',
-                row: 2,
+                kata: 'INFLUENZA',
+                petunjuk: 'Gangguan sistem pernafasan yang bergejala batuk pilek demam adalah',
+                row: 1,
                 col: 0,
                 arah: 'MENURUN'
             },
             {
+                no: 4,
+                kata: 'BRONKUS',
+                petunjuk: 'Saluran pernafasan sebelum bronkiolus',
+                row: 1,
+                col: 4,
+                arah: 'MENURUN'
+            },
+            {
                 no: 5,
-                kata: 'OLAHRAGA',
-                petunjuk: 'Cara menjaga organ pernafasan manusia adalah',
+                kata: 'DIAFRAGMA',
+                petunjuk: 'Rongga dada dan rongga perut di batasi oleh',
                 row: 2,
                 col: 7,
-                arah: 'MENDATAR'
+                arah: 'MENURUN'
             },
             {
                 no: 6,
                 kata: 'HIDUNG',
                 petunjuk: 'Alat pernafasan yang berfungsi menyaring udara',
-                row: 2,
-                col: 10,
-                arah: 'MENURUN'
+                row: 3,
+                col: 6,
+                arah: 'MENDATAR'
             },
             {
                 no: 7,
-                kata: 'BRONKUS',
-                petunjuk: 'Saluran pernafasan sebelum bronkiolus',
-                row: 2,
-                col: 15,
-                arah: 'MENURUN'
+                kata: 'LARING',
+                petunjuk: 'Yang menghubungkan faring dan trakea adalah',
+                row: 4,
+                col:0,
+                arah: 'MENDATAR'
             },
             {
                 no: 8,
@@ -90,22 +90,22 @@ export class TekaTeki extends Scene {
             },
             {
                 no: 9,
-                kata: 'TRAKEA',
-                petunjuk: 'Salah satu organ tubuh dalam sistem pernafasan',
-                row: 10,
-                col: 2,
+                kata: 'Asma',
+                petunjuk: 'Penyakit yang disebabkan oleh penyempitan bronkiolus sehingga penderita kesulitan bernafas ',
+                row: 9,
+                col: 0,
                 arah: 'MENDATAR'
             },
             {
                 no: 10,
-                kata: 'Asma',
-                petunjuk: 'Penyakit yang disebabkan oleh penyempitan bronkiolus sehingga penderita kesulitan bernafas ',
+                kata: 'TRAKEA',
+                petunjuk: 'Salah satu organ tubuh dalam sistem pernafasan',
                 row: 10,
-                col: 7,
+                col: 5,
                 arah: 'MENDATAR'
             }
-
         ];
+        
 
         this.daftarkata.forEach(item => {
             const { kata, row, col, arah } = item;
@@ -291,21 +291,22 @@ export class TekaTeki extends Scene {
 
     createCluesDesktop(x, y) {
         const cluesMendatar = [
-            { no: 1, text: "Yang menghubungkan faring dan trakea adalah " },
-            { no: 5, text: "Cara menjaga organ pernafasan manusia adalah " },
-            { no: 9, text: "Salah satu organ tubuh dalam sistem pernafasan " },
+            { no: 6, text: "Alat pernafasan yang berfungsi menyaring udara" },
+            { no: 7, text: "Yang menghubungkan faring dengan trakea adalah" },
             { no: 8, text: "Frekuensi pernafasan dipengaruhi oleh" },
-            { no: 10, text: "Penyakit yang disebabkan oleh penyempitan bronkiolus sehingga penderita kesulitan bernafas " },
+            { no: 9, text: "Penyakit yang disebabkan oleh penyempitan bronkiolus sehingga penderita mengalami kesulitan bernafas" },
+            { no: 10, text: "Salah satu organ tubuh dalam sistem pernafasan" },
         ];
+        
 
         const cluesMenurun = [
-            { no: 2, text: "Gangguan sistem pernafasan yang bergejala batuk pilek demam adalah" },
-            { no: 3, text: "Rongga dada dan rongga perut di batasi oleh " },
-            { no: 4, text: "Organ pernafasan manusia" },
-            { no: 6, text: "Alat pernafasan yang berfungsi menyaring udara" },
-            { no: 7, text: "Saluran pernafasan sebelum bronkiolus" },
-            
+            { no: 1, text: "Cara menjaga organ pernafasan manusia dengan" },
+            { no: 2, text: "Organ pernafasan manusia" },
+            { no: 3, text: "Gangguan sistem pernafasan yang bergejala batuk pilek demam adalah" },
+            { no: 4, text: "Saluran pernafasan sebelum bronkiolus" },
+            { no: 5, text: "Rongga dada dan rongga perut di batasi oleh" },
         ];
+        
 
         // Constants for styling
         const tabWidth = 140;
@@ -421,19 +422,20 @@ export class TekaTeki extends Scene {
 
     createCluesMobile(x, y, width) {
         const cluesMendatar = [
-            { no: 2, text: "Penyakit karena tersumbatnya aliran darah ke jantung" },
-            { no: 4, text: "Cairan kuning keruh yang mengandung sari makanan" },
-            { no: 7, text: "Pembuluh penghubung pembuluh nadi dan pembuluh balik" },
-            { no: 9, text: "Organ pengatur tekanan darah dan produksi sel darah merah" },
-            { no: 10, text: "Pembuluh nadi terbesar dari bilik kiri jantung" }
+            { no: 6, text: "Alat pernafasan yang berfungsi menyaring udara" },
+            { no: 7, text: "Yang menghubungkan faring dengan trakea adalah" },
+            { no: 8, text: "Frekuensi pernafasan dipengaruhi oleh" },
+            { no: 9, text: "Penyakit yang disebabkan oleh penyempitan bronkiolus sehingga penderita mengalami kesulitan bernafas" },
+            { no: 10, text: "Salah satu organ tubuh dalam sistem pernafasan" },
         ];
 
+
         const cluesMenurun = [
-            { no: 1, text: "Kondisi dengan gejala lemah, letih, dan wajah pucat" },
-            { no: 3, text: "Proses pemberian darah ke orang lain" },
-            { no: 5, text: "Sel darah untuk pembekuan darah" },
-            { no: 6, text: "Bagian jantung yang memompa darah ke paru-paru" },
-            { no: 8, text: "Bagian darah yang mengangkut sari-sari makanan" }
+            { no: 1, text: "Cara menjaga organ pernafasan manusia dengan" },
+            { no: 2, text: "Organ pernafasan manusia" },
+            { no: 3, text: "Gangguan sistem pernafasan yang bergejala batuk pilek demam adalah" },
+            { no: 4, text: "Saluran pernafasan sebelum bronkiolus" },
+            { no: 5, text: "Rongga dada dan rongga perut di batasi oleh" },
         ];
 
         const titleStyle = {
