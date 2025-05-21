@@ -17,7 +17,7 @@ export class TekaTeki extends Scene {
         this.isMobile = this.sys.game.device.os.android || this.sys.game.device.os.iOS;
 
         const rows = 14;
-        const cols = 18;
+        const cols = 16;
         this.answerKey = Array.from({ length: rows }, () =>
             Array.from({ length: cols }, () => '')
         );
